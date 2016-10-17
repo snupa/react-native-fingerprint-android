@@ -69,6 +69,6 @@ if(typeof FingerprintAndroidNative === 'object' && FingerprintAndroidNative) {
    });   
 }
 
-if(FingerprintAndroidNative) {
-    export default FingerprintAndroid;
+if(FingerprintAndroidNative != null) {
+    module.exports.default = FingerprintAndroid;
 }
