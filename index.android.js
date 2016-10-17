@@ -2,7 +2,10 @@
 
 'use strict';
 import { NativeModules, DeviceEventEmitter} from 'react-native';
-const FingerprintAndroidNative = NativeModules.FingerprintAndroid;
+let FingerprintAndroidNative = null;
+if(typeof NativeModules.FingerprintAndroid !== 'undefined') {
+   FingerprintAndroidNative = NativeModules.FingerprintAndroid;
+}
 const OVERRIDDEN_METHODS = ["authenticate"];
 
 export interface FingerprintError {
@@ -57,12 +60,15 @@ class FingerprintAndroid {
     }
 }
 
-//add all available functions from the native module (besides authenticate)
-Object.keys(FingerprintAndroidNative).forEach(key => {
-    if (OVERRIDDEN_METHODS.indexOf(key) === -1) {
-        FingerprintAndroid[key] = FingerprintAndroidNative[key];
-    }
-});
+if(typeof FingerprintAndroidNative === 'object' && FingerprintAndroidNative) {
+   //add all available functions from the native module (besides authenticate)
+   Object.keys(FingerprintAndroidNative).forEach(key => {
+       if (OVERRIDDEN_METHODS.indexOf(key) === -1) {
+           FingerprintAndroid[key] = FingerprintAndroidNative[key];
+       }
+   });   
+}
 
-
-export default FingerprintAndroid;
+if(FingerprintAndroidNative) {
+    export default FingerprintAndroid;
+}
